@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
+// Modelo Tag para palabras clave de las citas
 const Tag = sequelize.define(
   "Tag",
   {

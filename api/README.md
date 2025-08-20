@@ -1,127 +1,121 @@
 ---
 
-# 📚 Quotes API
+# Porthos-PT - Prueba Técnica de Citas
 
-API para obtener citas (quotes) y tags desde **Quotable.io**, almacenarlas en una base PostgreSQL y servirlas vía Express.
-Incluye **seed automático al levantar el servidor**.
-
----
-
-## 🔧 Tecnologías
-
-* Node.js 24
-* Express
-* Sequelize ORM
-* PostgreSQL
-* Axios
-* dotenv
+Aplicación web fullstack para mostrar citas motivacionales y explorar más citas por palabra clave.  
+Desarrollada con **React** en el frontend y **Node.js + Express + Sequelize** en el backend.
 
 ---
 
-## ⚙️ Instalación
+## Características principales
 
-1. Cloná el repositorio:
+- **Landing Page tipo "bricks":**  
+  Muestra bloques con citas, palabra clave y botón "More" para ver más citas relacionadas.
 
-```bash
-git clone <repo-url>
-cd <repo-folder>
-```
+- **Quote of the Day:**  
+  Página `/qod` que muestra una cita aleatoria con su autor.
 
-2. Instalá dependencias:
+- **Funcionalidad "More":**  
+  Al hacer clic en "More", se muestran 10 citas relacionadas en un modal tipo carrusel.
 
-```bash
-npm install
-```
+- **Manejo de cookies:**  
+  Al usar "More", se guarda la palabra clave en una cookie. Al recargar, la primera cita corresponde a esa palabra clave.
 
-3. Configurá variables de entorno en un archivo `.env` en la raíz:
+- **Consumo de API:**  
+  Utiliza una API propia que consume datos de [Quotable](https://api.quotable.io/) para obtener citas y filtrar por palabra clave.
 
-```
-PORT=3001
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
-DB_HOST=localhost
-DB_NAME=nombre_db
-```
+- **Manejo de errores:**  
+  Si la API falla, se muestra un spinner y se evita que la app se caiga.
+
+- **Responsive y accesible:**  
+  El diseño se adapta a distintos dispositivos y es accesible.
 
 ---
 
-## 🏃‍♂️ Ejecutar servidor
-
-```bash
-npm run dev
-```
-
-* Al iniciar, la API:
-
-  1. Conecta a la base de datos.
-  2. Sincroniza los modelos (`force: true`).
-  3. Carga automáticamente los **tags**.
-  4. 4 segundos, carga automáticamente los **quotes** (300 por defecto).
-* Escucha en el puerto definido en `.env` (default `3001`).
-
----
-
-## ⏳ Seed automático
-
-Durante el arranque verás en consola algo como:
+## Estructura del proyecto
 
 ```
-⏳ Espere... Sembrando tags...
-Tags seeded ✅
-⏳ Espere... Sembrando citas...
-................
-Quotes seeded ✅
-```
-
-* Esto reemplaza la necesidad de endpoints `/seedTag` y `/seedQuote` manuales.
-* Las funciones de seed están en `src/utils/saveTags.js` y `src/utils/saveQuotesdb.js`.
-
----
-
-## 📦 Endpoints (opcionales)
-
-> Solo si querés exponerlos, aunque el seed se haga automáticamente:
-
-| Método | Ruta                | Descripción                               |
-| ------ | ------------------- | ----------------------------------------- |
-| GET    | `/quotes`           | Obtener 10 quotes aleatorias con sus tags |
-| GET    | `/quotes/:tag`      | Obtener quotes filtradas por tag          |
-| GET    | `/quotes/tags`      | Obtener lista de todos los tags           |
-
----
-
-## 💻 Estructura de archivos
-
-```
-api/
- ┣ src/
- ┃ ┣ controllers/
- ┃ ┃ ┗ quotesControllers.js
- ┃ ┣ handler/      <- opcional si mantenés endpoints manuales
- ┃ ┃ ┗ quotesHandlers.js
- ┃ ┣ model/
- ┃ ┃ ┣ index.js
- ┃ ┃ ┣ quotes.js
- ┃ ┃ ┗ tags.js
- ┃ ┣ routes/
- ┃ ┃ ┗ routesQuotes.js
- ┃ ┣ utils/
- ┃ ┃ ┣ saveQuotesdb.js  <- lógica pura para quotes
- ┃ ┃ ┗ saveTags.js      <- lógica pura para tags
+📦api
+ ┣ 📂src
+ ┃ ┣ 📂controllers
+ ┃ ┣ 📂handler
+ ┃ ┣ 📂model
+ ┃ ┣ 📂routes
+ ┃ ┣ 📂utils
  ┃ ┣ app.js
- ┃ ┗ db.js
- ┣ .env
+ ┃ ┣ db.js
+ ┃ ┗ index.js
  ┣ index.js
- ┣ package.json
+
+📦client
+ ┣ 📂assets
+ ┣ 📂components
+ ┣ 📂pages
+ ┣ 📂service
+ ┣ 📂utils
+ ┣ App.jsx
+ ┣ index.css
+ ┗ main.jsx
 ```
 
 ---
 
-## ⚡ Notas
+## Instalación y ejecución
 
-* La API de **Quotable.io** tiene límite de 50 quotes por request.
-  Por eso `seedQuotesLogic` hace múltiples requests para juntar la cantidad deseada (por defecto 300).
-* Todos los seeds se hacen con funciones puras y `try/catch`, evitando la necesidad de “handlers falsos”.
-* El servidor arranca limpio, sincroniza la base y pobla los datos automáticamente.
+### Backend
+
+1. Instala dependencias:
+   ```bash
+   cd api
+   npm install
+   ```
+2. Configura las variables de entorno en un archivo `.env`:
+   ```
+   DB_USER=usuario
+   DB_PASSWORD=contraseña
+   DB_HOST=localhost
+   DB_NAME=nombre_db
+   PORT=3001
+   ```
+3. Inicia el servidor:
+   ```bash
+   npm start
+   ```
+
+### Frontend
+
+1. Instala dependencias:
+   ```bash
+   cd client
+   npm install
+   ```
+2. Inicia el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+3. Accede a [http://localhost:5173](http://localhost:5173) en tu navegador.
 
 ---
+
+## Personalización
+
+- Cambia el diseño de los bricks en `QuoteCard.jsx`.
+- El carrusel de citas adicionales está en `QuotesCarousel.jsx`.
+- El spinner se puede personalizar en `Spinner.jsx` o usando `react-spinners`.
+- Puedes modificar la lógica de seed en el backend para poblar la base de datos con más o menos citas/tags.
+
+---
+
+## Notas técnicas
+
+- El proyecto usa React, TailwindCSS y react-spinners en el frontend.
+- El backend usa Express, Sequelize y PostgreSQL.
+- El manejo de rutas se realiza con `react-router-dom`.
+- El código está comentado para facilitar su comprensión y mantenimiento.
+- El backend se encarga de poblar la base de datos con citas y tags desde la API de Quotable.
+
+---
+
+## Autor
+
+Desarrollado por [Jorge Nieva](https://github.com/jorgenieva23)

@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
+// Modelo Quote para almacenar citas
 const Quote = sequelize.define(
   "Quote",
   {

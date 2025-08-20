@@ -1,13 +1,16 @@
 import {
   getRandomQuotes,
   getQuotesByTag,
-  getAllTags
+  getOneRandomQuote,
+  getAllTags,
 } from "../controllers/quotesControllers.js";
 
+// Handler para obtener citas aleatorias
 export const getRandomQuotesHandler = async (req, res) => {
   try {
     const databaseQuotes = await getRandomQuotes(10);
 
+    // Formatea la respuesta con los datos necesarios
     const results = databaseQuotes.map((q) => ({
       id: q.id,
       author: q.author,
@@ -27,6 +30,17 @@ export const getRandomQuotesHandler = async (req, res) => {
   }
 };
 
+// Handler para obtener una cita aleatoria (Quote of the Day)
+export const getOneRandomQuotesHandler = async (req, res) => {
+  try {
+    const getRandom = await getOneRandomQuote();
+    res.status(200).json(getRandom);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Handler para obtener citas por palabra clave (tag)
 export const getQuotesByTagHandler = async (req, res) => {
   const { tag } = req.params;
 
@@ -38,6 +52,7 @@ export const getQuotesByTagHandler = async (req, res) => {
   }
 };
 
+// Handler para obtener todos los tags
 export const getTagsHandler = async (req, res) => {
   try {
     const tags = await getAllTags();

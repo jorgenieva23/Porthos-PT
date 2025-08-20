@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 
+// Componente Modal para mostrar contenido superpuesto
 export const Modal = ({ open, onClose, children }) => {
   const [isVisible, setIsVisible] = useState(false);
 
+  // Maneja la animación de aparición/desaparición
   useEffect(() => {
     let timeoutId;
 
@@ -19,6 +21,7 @@ export const Modal = ({ open, onClose, children }) => {
     return () => clearTimeout(timeoutId);
   }, [open]);
 
+  // Permite cerrar el modal con la tecla Escape
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -33,18 +36,21 @@ export const Modal = ({ open, onClose, children }) => {
   }, [onClose]);
 
   return (
+    // Fondo oscuro y centrado
     <div
       className={`fixed inset-0 flex justify-center items-center transition-colors ${
         isVisible ? "visible bg-black/50" : "invisible bg-black/0"
       }`}
       onClick={onClose}
     >
+      {/* Contenido del modal */}
       <div
-        className={`bg-white rounded-lg shadow p-7 transition-all relative ${
+        className={`bg-white rounded-lg shadow p-7 transition-all relative overflow-auto max-h-[80vh] w-full max-w-2xl ${
           isVisible ? "scale-100 opacity-100" : "scale-110 opacity-0"
-        } overflow-auto max-h-full`}
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Botón para cerrar el modal */}
         <button
           className="absolute top-2 right-2 py-0.5 px-2 border border-neutral-200 rounded-md text-gray-400 bg-white hover:bg-slate-50 hover:text-gray-600"
           onClick={onClose}
