@@ -19,20 +19,18 @@ async function startServer() {
     await sequelize.sync({ force: true });
     console.log("✅ Modelos sincronizados correctamente.");
 
-    // Pobla los tags desde la API externa
-    await seedTagsLogic();
-    console.log("Tags seeded ✅");
-    console.log("⏳ Espere... Sembrando citas...");
-
-    // Pobla las citas después de un pequeño delay
-    setTimeout(async () => {
-      await seedQuotesLogic(300);
-      console.log("Quotes seeded ✅");
-    }, 4000);
-
     // Inicia el servidor Express
-    app.listen(PORT, () => {
+    app.listen(PORT, async () => {
       console.log(`🚀 Servidor escuchando en el puerto ${PORT}`);
+
+      try {
+        await seedTagsLogic();
+        console.log("Tags seeded ✅");
+        await seedQuotesLogic(300);
+        console.log("Quotes seeded ✅");
+      } catch (err) {
+        console.error("Error al poblar datos:", err.message);
+      }
     });
   } catch (error) {
     console.error("❌ Error al iniciar el servidor:", error.message);
