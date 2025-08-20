@@ -11,13 +11,11 @@ export const QuoteCarousel = ({ quotes }) => {
 
   return (
     <div className="flex flex-col items-center">
-      {/* Muestra la cita actual */}
       <QuoteCard
         content={quote.content}
         author={quote.author}
         tag={quote.Tags?.[0]}
       />
-      {/* Puntitos para navegar entre las citas */}
       <div className="flex gap-2 mt-4">
         {quotes.map((_, i) => (
           <button

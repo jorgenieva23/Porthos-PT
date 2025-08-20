@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-// Componente Modal para mostrar contenido superpuesto
 export const Modal = ({ open, onClose, children }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -36,7 +35,6 @@ export const Modal = ({ open, onClose, children }) => {
   }, [onClose]);
 
   return (
-    // Fondo oscuro y centrado
     <div
       className={`fixed inset-0 flex justify-center items-center transition-colors ${
         isVisible ? "visible bg-black/50" : "invisible bg-black/0"
@@ -50,7 +48,6 @@ export const Modal = ({ open, onClose, children }) => {
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Botón para cerrar el modal */}
         <button
           className="absolute top-2 right-2 py-0.5 px-2 border border-neutral-200 rounded-md text-gray-400 bg-white hover:bg-slate-50 hover:text-gray-600"
           onClick={onClose}

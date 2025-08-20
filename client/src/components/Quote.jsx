@@ -1,7 +1,6 @@
 import { MoreButton } from "./MoreButton";
 import { QuoteCard } from "./QuoteCard";
 
-// Componente que muestra una lista de citas en formato "bricks"
 export const Quote = ({ quote, onMore }) => {
   if (!quote) return null;
 
