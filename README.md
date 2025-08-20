@@ -1,4 +1,4 @@
-# Porthos-PT - Prueba Técnica de Citas
+# Porthos-PT - Prueba Técnica
 
 Aplicación web fullstack para mostrar citas motivacionales y explorar más citas por palabra clave.  
 Desarrollada con **React** en el frontend y **Node.js + Express + Sequelize** en el backend.
