@@ -3,7 +3,7 @@ export const MoreButton = ({ tag, onClick }) => {
   return (
     <button
       onClick={() => onClick(tag)}
-      className="text-gray-100 hover:underline bg-blue-500 rounded-md p-1 mt-2 text-sm"
+      className="text-gray-100 hover:underline bg-blue-500 rounded-md p-1 mt-2 px-3 text-sm"
     >
       More
     </button>
