@@ -1,50 +1,47 @@
 import axios from "axios";
+import fs from "fs";
 import { Quote, Tag } from "../model/index.js";
 
-// Función para obtener muchas citas aleatorias desde la API externa
-async function fetchQuotes(total = 300) {
-  const perRequest = 50;
-  const requests = Math.ceil(total / perRequest);
-  let allQuotes = [];
+// export const fetchQuotes = async (total = 300) => {
+//   const perRequest = 50;
+//   const requests = Math.ceil(total / perRequest);
+//   let allQuotes = [];
 
-  // Realiza varias peticiones para obtener el total deseado
-  for (let i = 0; i < requests; i++) {
-    const response = await axios.get(
-      `https://api.quotable.io/quotes/random?limit=${perRequest}`,
-      {
-        httpsAgent: new (
-          await import("https")
-        ).Agent({
-          rejectUnauthorized: false,
-        }),
-      }
-    );
+//   for (let i = 0; i < requests; i++) {
+//     const response = await axios.get(
+//       `https://api.quotable.io/quotes/random?limit=${perRequest}`,
+//       {
+//         httpsAgent: new (
+//           await import("https")
+//         ).Agent({
+//           rejectUnauthorized: false,
+//         }),
+//       }
+//     );
 
-    // Agrega las citas obtenidas al array principal
-    if (Array.isArray(response.data)) {
-      allQuotes = [...allQuotes, ...response.data];
-    }
-  }
+//     if (Array.isArray(response.data)) {
+//       allQuotes = [...allQuotes, ...response.data];
+//     }
+//   }
 
-  return allQuotes;
-}
+//   return allQuotes;
+// };
 
-// Función para poblar la base de datos con citas y asociarlas a tags
 export const seedQuotesLogic = async (total = 300) => {
-  const data = await fetchQuotes(total);
+  const rawData = fs.readFileSync("./data/quotes.json", "utf8");
+  const data = JSON.parse(rawData);
 
-  // Verifica que la respuesta sea un array
+  // const data = await fetchQuotes(total);
+
   if (!data || !Array.isArray(data)) {
     throw new Error("La API no devolvió un array de quotes");
   }
 
-  // Obtiene todos los tags existentes en la base de datos
   const allTags = await Tag.findAll();
 
-  // Guarda cada cita en la base de datos y le asigna tags
   for (const q of data) {
     const [quote] = await Quote.findOrCreate({
-      where: { id: q._id },
+      where: { id: q._id || q.id },
       defaults: {
         author: q.author,
         content: q.content,
@@ -55,7 +52,6 @@ export const seedQuotesLogic = async (total = 300) => {
       },
     });
 
-    // Asigna tags a la cita (los que vienen de la API o aleatorios)
     let tagsToAssign =
       q.tags && q.tags.length
         ? await Tag.findAll({ where: { name: q.tags } })
@@ -65,4 +61,6 @@ export const seedQuotesLogic = async (total = 300) => {
 
     await quote.setTags(tagsToAssign);
   }
+
+  console.log("✅ Quotes cargadas desde JSON");
 };
