@@ -28,17 +28,16 @@ import { Quote, Tag } from "../model/index.js";
 // };
 
 export const seedQuotesLogic = async (total = 300) => {
-  const rawData = fs.readFileSync("./data/quotes.json", "utf8");
+ const rawData = fs.readFileSync("./data/quotes.json", "utf8");
   const data = JSON.parse(rawData);
 
   // const data = await fetchQuotes(total);
 
-  if (!data || !Array.isArray(data)) {
-    throw new Error("La API no devolvió un array de quotes");
-  }
+  // if (!data || !Array.isArray(data)) {
+  //   throw new Error("La API no devolvió un array de quotes");
+  // }
 
   const allTags = await Tag.findAll();
-
   for (const q of data) {
     const [quote] = await Quote.findOrCreate({
       where: { id: q._id || q.id },
