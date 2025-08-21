@@ -8,10 +8,39 @@ Desarrollada con **React** en el frontend y **Node.js + Express + Sequelize** en
 ## Aclaración importante
 
 > **Sobre el uso de la API y el backend propio:**  
-> El challenge requería mostrar citas relacionadas con palabras clave (keywords/tags) y funcionalidades avanzadas con la API de ZenQuotes. Sin embargo, la API original solo permitía obtener una cita por llamada limitadas y el acceso a keywords era una funcionalidad premium (de pago).  
+> El challenge requería mostrar citas relacionadas con palabras clave (keywords/tags) y funcionalidades avanzadas con la API de ZenQuotes. Sin embargo, la API original solo permitía obtener una cita por llamada limitada y el acceso a keywords era una funcionalidad premium (de pago).  
 > Para cumplir con todos los requisitos del challenge, utilicé la API pública de [Quotable](https://api.quotable.io/) que sí provee citas y tags.  
-> Debido a limitaciones de CORS y HTTPS, y para evitar caídas por límites de uso, desarrollé un backend propio que almacena las citas y tags en una base de datos.  
+> Debido a limitaciones de CORS, HTTPS y problemas de DNS (la API de Quotable no siempre respondía correctamente en entornos locales o con ciertas configuraciones de red), desarrollé un backend propio que almacena las citas y tags en una base de datos.  
+> Para evitar caídas y problemas de conectividad, convertí los datos obtenidos de la API en archivos JSON (`quotes.json` y `tags.json`) y los uso para poblar la base de datos localmente.  
 > Así, la aplicación puede cumplir con todos los requisitos funcionales, de experiencia de usuario y manejo de cookies, trabajando de forma estable y escalable.
+
+---
+
+## ⚠️ Nota para ejecución local
+
+Si vas a trabajar de forma local y quieres usar la API externa (Quotable), debes **descomentar** las funciones que hacen llamados directos a la API en los archivos del backend:
+
+Por ejemplo, en `api/src/utils/saveQuotesdb.js` y `api/src/utils/saveTags.js`:
+
+```javascript
+// Para poblar la base de datos desde la API externa, descomenta estas líneas:
+
+// const response = await axios.get("https://api.quotable.io/tags", { ... });
+// const data = response.data;
+
+// const data = await fetchQuotes(total);
+```
+
+Y comenta o elimina el uso de los archivos JSON:
+
+```javascript
+// Si quieres usar los archivos locales, mantén estas líneas activas:
+const rawData = fs.readFileSync("./data/quotes.json", "utf8");
+const data = JSON.parse(rawData);
+```
+
+> **Recomendación:**  
+> Usar los archivos JSON es más seguro y rápido en local, ya que evita problemas de DNS, CORS y límites de la API externa.
 
 ---
 
@@ -53,6 +82,9 @@ Desarrollada con **React** en el frontend y **Node.js + Express + Sequelize** en
  ┃ ┣ app.js
  ┃ ┣ db.js
  ┃ ┗ index.js
+ ┣ 📂data
+ ┃ ┣ quotes.json
+ ┃ ┗ tags.json
  ┣ index.js
 
 📦client
@@ -84,6 +116,7 @@ Desarrollada con **React** en el frontend y **Node.js + Express + Sequelize** en
    DB_HOST=localhost
    DB_NAME=nombre_db
    PORT=3001
+   DATABASE_URL=postgres://usuario:contraseña@localhost/nombre_db
    ```
 3. Inicia el servidor:
    ```bash
@@ -120,7 +153,7 @@ Desarrollada con **React** en el frontend y **Node.js + Express + Sequelize** en
 - El backend usa Express, Sequelize y PostgreSQL.
 - El manejo de rutas se realiza con `react-router-dom`.
 - El código está comentado para facilitar su comprensión y mantenimiento.
-- El backend se encarga de poblar la base de datos con citas y tags desde la API de Quotable.
+- El backend se encarga de poblar la base de datos con citas y tags desde la API de Quotable o desde archivos JSON locales.
 
 ---
 
